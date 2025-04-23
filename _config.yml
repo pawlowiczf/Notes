@@ -1,0 +1,23 @@
+title: GoNotes
+description: Technical university notes
+theme: minima
+repository: gonotes
+color_scheme: light
+
+# Wyłączenie GitHub Metadata (opcjonalnie, jeśli nie używasz GitHub Pages)
+plugins:
+  - jekyll-seo-tag
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-gist
+  - jekyll-include-cache
+
+# Jeśli dalej narzeka — całkowicie wyłącz github-metadata
+exclude:
+  - .github
+
+
+head_extra: |
+  <link rel="stylesheet" href="/assets/css/custom.css">
+  
+head_extra: "assets/css/custom.css"

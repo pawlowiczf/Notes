@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>GRPC SETUP Java | GoNotes</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="GRPC SETUP Java" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Technical university notes" />
+<meta property="og:description" content="Technical university notes" />
+<link rel="canonical" href="http://localhost:4000/grpc-notes/notes2.html" />
+<meta property="og:url" content="http://localhost:4000/grpc-notes/notes2.html" />
+<meta property="og:site_name" content="GoNotes" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="GRPC SETUP Java" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Technical university notes","headline":"GRPC SETUP Java","url":"http://localhost:4000/grpc-notes/notes2.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="GoNotes" /></head>
+<body><style>
+.site-header { border-top: 5px solid #ffffff; border-bottom: 1px solid #e8e8e8; min-height: 55.95px; position: relative; }
+</style>
+
+<header class="site-header" role="banner">
+  <div class="wrapper">
+    <a class="site-title" rel="author" href="/">GoNotes</a>
+
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h2 id="ustawienia-początkowe---java">Ustawienia początkowe - Java</h2>
+<p>Podobnie, jak w Go, musimy pobrać pluginy Protoc dla Javy i dodać biblioteki obsługujące gRPC w Javie. Potrzebne wpisy możemy znaleźć, wyszukując frazy: <code class="language-plaintext highlighter-rouge">java grpc github</code>, czy <code class="language-plaintext highlighter-rouge">protobuf gradle plugin</code>. W pliku <code class="language-plaintext highlighter-rouge">build.gradle</code> dodajemy:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dependencies {
+    implementation("com.google.protobuf:protobuf-java:4.30.2")
+
+    runtimeOnly 'io.grpc:grpc-netty-shaded:1.72.0'
+    implementation 'io.grpc:grpc-protobuf:1.72.0'
+    implementation 'io.grpc:grpc-stub:1.72.0'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.25.5"
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.72.0'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+</code></pre></div></div>
+
+<p>W plikach Proto możemy dodać opcję:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Nazwa pakietu dla wygenerowanych plików Java
+option java_package = "com.pcbook.pb";
+
+// Dzieli wygenerowane pliki, aby były czytelniesze 
+option java_multiple_files = true; 
+</code></pre></div></div>
+
+<p>Po kliknięciu opcji <code class="language-plaintext highlighter-rouge">Build</code> projektu, wszystkie pliki <code class="language-plaintext highlighter-rouge">.proto</code>, <strong>umieszczone w folderze <code class="language-plaintext highlighter-rouge">src/main/proto</code></strong> zostaną automatycznie skompilowane i umieszczone w odpowiednich folderach.</p>
+
+<hr style="margin-bottom: 13px;" />
+
+<p>W celu zmiany domyślnego folderu z plikami <code class="language-plaintext highlighter-rouge">.proto</code> dodaj do <code class="language-plaintext highlighter-rouge">build.gradle</code>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+        proto {
+            srcDir 'src/main/proto2'  // ← tu podajesz własny katalog z .proto
+        }
+    }
+}
+</code></pre></div></div>
+
+      </div>
+    </main></body>
+
+</html>
