@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Unary RPC - Java | GoNotes</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Unary RPC - Java" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Technical university notes" />
+<meta property="og:description" content="Technical university notes" />
+<link rel="canonical" href="http://localhost:4000/grpc-notes/notes6.html" />
+<meta property="og:url" content="http://localhost:4000/grpc-notes/notes6.html" />
+<meta property="og:site_name" content="GoNotes" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Unary RPC - Java" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Technical university notes","headline":"Unary RPC - Java","url":"http://localhost:4000/grpc-notes/notes6.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="GoNotes" /></head>
+<body><style>
+.site-header { border-top: 5px solid #ffffff; border-bottom: 1px solid #e8e8e8; min-height: 55.95px; position: relative; }
+</style>
+
+<header class="site-header" role="banner">
+  <div class="wrapper">
+    <a class="site-title" rel="author" href="/">GoNotes</a>
+
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <p>Analogicznie, tworzymy klasę, która rozszerza bazową implementację serwisu. Następnie, możemy przejść do konfiguracji serwera.</p>
+
+<h2 id="uruchomienie-i-nasłuchiwanie-przez-serwer">Uruchomienie i nasłuchiwanie przez serwer</h2>
+<p>Tworzymy sobie nową klasę np. <code class="language-plaintext highlighter-rouge">LaptopServer</code>. Do rejestracji, używamy klasy <code class="language-plaintext highlighter-rouge">ServerBuilder</code>. Zróbmy to w konstruktorze:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">port</span><span class="o">;</span>
+<span class="kd">private</span> <span class="kd">final</span> <span class="nc">Server</span> <span class="n">server</span><span class="o">;</span> <span class="c1">// server z klasy io.GRPC</span>
+
+<span class="kd">public</span> <span class="nf">LaptopServer</span><span class="o">(</span><span class="kt">int</span> <span class="n">port</span><span class="o">,</span> <span class="nc">LaptopStore</span> <span class="n">store</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">(</span><span class="nc">ServerBuilder</span><span class="o">.</span><span class="na">forPort</span><span class="o">(</span><span class="n">port</span><span class="o">),</span> <span class="n">port</span><span class="o">,</span> <span class="n">store</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="kd">public</span> <span class="nf">LaptopServer</span><span class="o">(</span><span class="nc">ServerBuilder</span><span class="o">&lt;?&gt;</span> <span class="n">serverBuilder</span><span class="o">,</span> <span class="kt">int</span> <span class="n">port</span><span class="o">,</span> <span class="nc">LaptopStore</span> <span class="n">store</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">port</span> <span class="o">=</span> <span class="n">port</span><span class="o">;</span>
+
+    <span class="nc">LaptopService</span> <span class="n">laptopService</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LaptopService</span><span class="o">(</span><span class="n">store</span><span class="o">);</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">serverBuilder</span><span class="o">.</span><span class="na">addService</span><span class="o">(</span><span class="n">laptopService</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Trzeba także stworzyć funkcję obsługujące startowanie i zamykanie serwera oraz tzw. <code class="language-plaintext highlighter-rouge">shutdown hooks</code>:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">start</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
+    <span class="n">server</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+    <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"server started on port "</span> <span class="o">+</span> <span class="n">port</span><span class="o">);</span>
+
+    <span class="nc">Runtime</span><span class="o">.</span><span class="na">getRuntime</span><span class="o">().</span><span class="na">addShutdownHook</span><span class="o">(</span><span class="k">new</span> <span class="nc">Thread</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"shut down gRPC server because JVM shuts down"</span><span class="o">);</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="nc">LaptopServer</span><span class="o">.</span><span class="na">this</span><span class="o">.</span><span class="na">stop</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">err</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"server shut down"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">});</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">stop</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">server</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">server</span><span class="o">.</span><span class="na">shutdown</span><span class="o">().</span><span class="na">awaitTermination</span><span class="o">(</span><span class="mi">30</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">blockUntilShutdown</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">server</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">server</span><span class="o">.</span><span class="na">awaitTermination</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="nc">LaptopServer</span> <span class="n">server</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LaptopServer</span><span class="o">(</span><span class="mi">8080</span><span class="o">,</span> <span class="n">store</span><span class="o">);</span>
+    <span class="n">server</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+    <span class="n">server</span><span class="o">.</span><span class="na">blockUntilShutdown</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>W Javie dostępne są także konteksty</strong></p>
+
+<h2 id="uruchomienie-i-połączenie-klienta-z-serwerem">Uruchomienie i połączenie klienta z serwerem</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LaptopClient</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="nc">Logger</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="nc">LaptopClient</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">ManagedChannel</span> <span class="n">channel</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">LaptopServiceBlockingStub</span> <span class="n">blockingStub</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">LaptopClient</span><span class="o">(</span><span class="nc">String</span> <span class="n">host</span><span class="o">,</span> <span class="kt">int</span> <span class="n">port</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="nc">ManagedChannelBuilder</span><span class="o">.</span><span class="na">forAddress</span><span class="o">(</span><span class="n">host</span><span class="o">,</span> <span class="n">port</span><span class="o">).</span><span class="na">usePlaintext</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
+        <span class="n">blockingStub</span> <span class="o">=</span> <span class="nc">LaptopServiceGrpc</span><span class="o">.</span><span class="na">newBlockingStub</span><span class="o">(</span><span class="n">channel</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">shutdown</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+        <span class="n">channel</span><span class="o">.</span><span class="na">shutdown</span><span class="o">().</span><span class="na">awaitTermination</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">createLaptop</span><span class="o">(</span><span class="nc">Laptop</span> <span class="n">laptop</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">CreateLaptopRequest</span> <span class="n">req</span> <span class="o">=</span> <span class="nc">CreateLaptopRequest</span><span class="o">.</span><span class="na">newBuilder</span><span class="o">().</span><span class="na">setLaptop</span><span class="o">(</span><span class="n">laptop</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+        <span class="nc">CreateLaptopResponse</span> <span class="n">rsp</span> <span class="o">=</span> <span class="nc">CreateLaptopResponse</span><span class="o">.</span><span class="na">getDefaultInstance</span><span class="o">();</span>
+
+        <span class="c1">// Można dodać catchowanie bardziej złożonych wyjątków z pomocą StatusRunTimeException!</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">rsp</span> <span class="o">=</span> <span class="n">blockingStub</span><span class="o">.</span><span class="na">createLaptop</span><span class="o">(</span><span class="n">req</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">logger</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="nc">Level</span><span class="o">.</span><span class="na">SEVERE</span><span class="o">,</span> <span class="s">"request failed: "</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+        <span class="o">}</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"laptop created with ID: "</span> <span class="o">+</span> <span class="n">rsp</span><span class="o">.</span><span class="na">getId</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+        <span class="nc">Generator</span> <span class="n">generator</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Generator</span><span class="o">();</span>
+
+        <span class="nc">LaptopClient</span> <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LaptopClient</span><span class="o">(</span><span class="s">"0.0.0.0"</span><span class="o">,</span> <span class="mi">8080</span><span class="o">);</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">client</span><span class="o">.</span><span class="na">createLaptop</span><span class="o">(</span><span class="n">generator</span><span class="o">.</span><span class="na">NewLaptop</span><span class="o">());</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">client</span><span class="o">.</span><span class="na">shutdown</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+      </div>
+    </main></body>
+
+</html>

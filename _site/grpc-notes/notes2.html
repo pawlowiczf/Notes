@@ -93,6 +93,27 @@ option java_multiple_files = true;
 }
 </code></pre></div></div>
 
+<h2 id="tworzenie-przykładowych-obiektów-messages-w-javie">Tworzenie przykładowych obiektów (messages) w Javie</h2>
+<p>Wygenerowany kod jest dość bogaty - umożliwia łatwe tworzenie obiektów, z pomocą wzorca <code class="language-plaintext highlighter-rouge">Builder</code>.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nc">Keyboard</span> <span class="nf">NewKeyboard</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="nc">Keyboard</span><span class="o">.</span><span class="na">newBuilder</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">setLayout</span><span class="o">(</span><span class="n">randomKeyboardLayout</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">setBacklit</span><span class="o">(</span><span class="n">rand</span><span class="o">.</span><span class="na">nextBoolean</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Obiekt Timestamp Proto, z biblioteki google.Protobuf</span>
+<span class="kd">private</span> <span class="nc">Timestamp</span> <span class="nf">timestampNow</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">Instant</span> <span class="n">now</span> <span class="o">=</span> <span class="nc">Instant</span><span class="o">.</span><span class="na">now</span><span class="o">();</span>
+    <span class="k">return</span> <span class="nc">Timestamp</span><span class="o">.</span><span class="na">newBuilder</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">setSeconds</span><span class="o">(</span><span class="n">now</span><span class="o">.</span><span class="na">getEpochSecond</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">setNanos</span><span class="o">(</span><span class="n">now</span><span class="o">.</span><span class="na">getNano</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
       </div>
     </main></body>
 

@@ -67,3 +67,26 @@ sourceSets {
     }
 }
 ```
+
+## Tworzenie przykładowych obiektów (messages) w Javie 
+Wygenerowany kod jest dość bogaty - umożliwia łatwe tworzenie obiektów, z pomocą wzorca `Builder`.
+
+```java
+public Keyboard NewKeyboard() {
+    return Keyboard.newBuilder()
+        .setLayout(randomKeyboardLayout())
+        .setBacklit(rand.nextBoolean())
+        .build();
+}
+```
+
+```java
+// Obiekt Timestamp Proto, z biblioteki google.Protobuf
+private Timestamp timestampNow() {
+    Instant now = Instant.now();
+    return Timestamp.newBuilder()
+        .setSeconds(now.getEpochSecond())
+        .setNanos(now.getNano())
+        .build();
+}
+```
