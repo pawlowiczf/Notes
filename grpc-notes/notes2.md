@@ -6,12 +6,18 @@ title: GRPC SETUP Java
 ## Ustawienia początkowe - Java
 Podobnie, jak w Go, musimy pobrać pluginy Protoc dla Javy i dodać biblioteki obsługujące gRPC w Javie. Potrzebne wpisy możemy znaleźć, wyszukując frazy: `java grpc github`, czy `protobuf gradle plugin`. W pliku `build.gradle` dodajemy:
 ```
+plugins {
+    id 'java'
+    id "com.google.protobuf" version "0.9.5"
+}
+
 dependencies {
     implementation("com.google.protobuf:protobuf-java:4.30.2")
 
     runtimeOnly 'io.grpc:grpc-netty-shaded:1.72.0'
     implementation 'io.grpc:grpc-protobuf:1.72.0'
     implementation 'io.grpc:grpc-stub:1.72.0'
+    implementation("javax.annotation:javax.annotation-api:1.3.2")
 }
 
 sourceSets {
