@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>GRPC SETUP Java | GoNotes</title>
-<meta name="generator" content="Jekyll v3.10.0" />
-<meta property="og:title" content="GRPC SETUP Java" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="Technical university notes" />
-<meta property="og:description" content="Technical university notes" />
-<link rel="canonical" href="http://localhost:4000/grpc-notes/notes2.html" />
-<meta property="og:url" content="http://localhost:4000/grpc-notes/notes2.html" />
-<meta property="og:site_name" content="GoNotes" />
-<meta property="og:type" content="website" />
-<meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="GRPC SETUP Java" />
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"Technical university notes","headline":"GRPC SETUP Java","url":"http://localhost:4000/grpc-notes/notes2.html"}</script>
-<!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="GoNotes" /></head>
-<body><style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+  <title>Menu | GoNotes</title>
+  <meta name="generator" content="Jekyll v3.10.0" />
+  <meta property="og:title" content="Menu" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="Technical university notes" />
+  <meta property="og:description" content="Technical university notes" />
+  <link rel="canonical" href="http://localhost:4000/" />
+  <meta property="og:url" content="http://localhost:4000/" />
+  <meta property="og:site_name" content="GoNotes" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="twitter:title" content="Menu" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","description":"Technical university notes","headline":"Menu","name":"GoNotes","url":"http://localhost:4000/"}</script>
+  <!-- End Jekyll SEO tag -->
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="GoNotes" />
+  <link rel="stylesheet" href="../assets/css/custom.css">
+  <link rel="stylesheet" href="/assets/css/custom.css">
+</head><body>
+
+<style>
 .site-header { border-top: 5px solid #ffffff; border-bottom: 1px solid #e8e8e8; min-height: 55.95px; position: relative; }
 </style>
 
 <header class="site-header" role="banner">
   <div class="wrapper">
-    <a class="site-title" rel="author" href="/">GoNotes</a>
+    <a class="site-title" rel="author" href="/Notes">GoNotes</a>
 
   </div>
 </header>
@@ -33,12 +37,18 @@
       <div class="wrapper">
         <h2 id="ustawienia-początkowe---java">Ustawienia początkowe - Java</h2>
 <p>Podobnie, jak w Go, musimy pobrać pluginy Protoc dla Javy i dodać biblioteki obsługujące gRPC w Javie. Potrzebne wpisy możemy znaleźć, wyszukując frazy: <code class="language-plaintext highlighter-rouge">java grpc github</code>, czy <code class="language-plaintext highlighter-rouge">protobuf gradle plugin</code>. W pliku <code class="language-plaintext highlighter-rouge">build.gradle</code> dodajemy:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dependencies {
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>plugins {
+    id 'java'
+    id "com.google.protobuf" version "0.9.5"
+}
+
+dependencies {
     implementation("com.google.protobuf:protobuf-java:4.30.2")
 
     runtimeOnly 'io.grpc:grpc-netty-shaded:1.72.0'
     implementation 'io.grpc:grpc-protobuf:1.72.0'
     implementation 'io.grpc:grpc-stub:1.72.0'
+    implementation("javax.annotation:javax.annotation-api:1.3.2")
 }
 
 sourceSets {

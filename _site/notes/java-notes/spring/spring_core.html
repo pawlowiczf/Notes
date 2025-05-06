@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+  <title>Menu | GoNotes</title>
+  <meta name="generator" content="Jekyll v3.10.0" />
+  <meta property="og:title" content="Menu" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="Technical university notes" />
+  <meta property="og:description" content="Technical university notes" />
+  <link rel="canonical" href="http://localhost:4000/" />
+  <meta property="og:url" content="http://localhost:4000/" />
+  <meta property="og:site_name" content="GoNotes" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="twitter:title" content="Menu" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","description":"Technical university notes","headline":"Menu","name":"GoNotes","url":"http://localhost:4000/"}</script>
+  <!-- End Jekyll SEO tag -->
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="GoNotes" />
+  <link rel="stylesheet" href="../assets/css/custom.css">
+  <link rel="stylesheet" href="/assets/css/custom.css">
+</head><body>
+
+<style>
+.site-header { border-top: 5px solid #ffffff; border-bottom: 1px solid #e8e8e8; min-height: 55.95px; position: relative; }
+</style>
+
+<header class="site-header" role="banner">
+  <div class="wrapper">
+    <a class="site-title" rel="author" href="/Notes">GoNotes</a>
+
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h2 id="wstrzykiwanie-zależości-przez-konstruktor">Wstrzykiwanie zależości przez konstruktor</h2>
+<p>W celu oznaczenia klasy, jako kandydata do wstrzyknięcia, należy oznaczyć go anotacją <code class="language-plaintext highlighter-rouge">@Component</code>. Przykładowo:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Component 
+@Lazy
+public class MercedesMechanic implements Mechanic {
+    @Override 
+    public String fixCar() {
+        return "Fixing Mercedes";
+    }
+}
+</code></pre></div></div>
+<p>Adnotacja <code class="language-plaintext highlighter-rouge">@Lazy</code> powoduje, że obiekt jest inicjalizowany, dopiero, gdy jest potrzebny.</p>
+
+<p>Następnie, gdy potrzebujemy obiekt tej klasy w innej, tworzymy konstruktor i oznaczamy go adnotacją <code class="language-plaintext highlighter-rouge">@Autowired</code>.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Autowired 
+public DemoController(Mechanic mechanic)
+</code></pre></div></div>
+
+<h2 id="wstrzykiwanie-zależności-przez-setter">Wstrzykiwanie zależności przez setter</h2>
+<p>To samo, ale wstrzykujemy przez settery:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Autowired
+void setMechanic(Mechanic mechanic) {
+    this.mechanic = mechanic;
+}
+</code></pre></div></div>
+
+<h2 id="problem-niejednoznaczności">Problem niejednoznaczności</h2>
+
+<h3 id="adnotacja-qualifier">Adnotacja <code class="language-plaintext highlighter-rouge">@Qualifier</code></h3>
+<p>Co jeśli, mamy więcej implementacji danego interfejsu? Którą klasę wstrzyknąć? Możemy być dokładniejsi i napisać:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Autowired
+void setCoach(@Qualifier("mercedesMechanic") Mechanic mechanic) {}
+</code></pre></div></div>
+<p>Podany string to <code class="language-plaintext highlighter-rouge">beanID</code> - taki sam, jak nazwa klasy, ale z małej litery.</p>
+
+<h3 id="adnotacja-primary">Adnotacja <code class="language-plaintext highlighter-rouge">@Primary</code></h3>
+<p>Możemy implementację danego interfejsu oznaczyć adnotacją <code class="language-plaintext highlighter-rouge">Primary</code> - taka adnotacja może być tyko jedna. Taka klasa będzie domyślnie wstrzykiwana, w przypadku braku jawnego określenia innej.</p>
+
+<h2 id="bean-scope">Bean Scope</h2>
+<p>Domyślnie, Spring tworzy jedną instację każdego komponentu - Singleton. Możemy to zmodyfikować, np. aby przy każdym wstrzyknięciu, tworzył nowy obiekt.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) // only one instance
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE) // many instances
+</code></pre></div></div>
+
+<h2 id="postkonstruktor-i-dekonstruktor">PostKonstruktor i Dekonstruktor</h2>
+<p>Po inicjalizacji Beana, możemy wykonać jeszcze własną inicjalizację, np. połączenie z bazą danych. Możemy także, przed wyłączeniem apliacji, takie połączenie zakończyć.</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@PostConstruct</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">()</span> <span class="o">{}</span>
+
+<span class="nd">@PreDestroy</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">destroy</span><span class="o">()</span> <span class="o">{}</span>
+</code></pre></div></div>
+
+<h2 id="configuration-i-bean"><code class="language-plaintext highlighter-rouge">@Configuration</code> i <code class="language-plaintext highlighter-rouge">@Bean</code></h2>
+<p>Czasami cieżko tworzyć klasy z adnotacją <code class="language-plaintext highlighter-rouge">@Component</code>, gdy np. używamy zewnętrznych bibliotek. Możemy stworzyć własną klasę konfiguracyjną, stworzyć metodę z adnotacją <code class="language-plaintext highlighter-rouge">@Bean</code> i w tej metodzie zaimplementować funkcjonalności, zwracajać ostatecznie dany obiekt.</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SportConfig</span> <span class="o">{</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="nc">Coach</span> <span class="nf">swimCoach</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// dowolna konfiguracja, logika</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">SwimCoach</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+      </div>
+    </main></body>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+  <title>Menu | GoNotes</title>
+  <meta name="generator" content="Jekyll v3.10.0" />
+  <meta property="og:title" content="Menu" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="Technical university notes" />
+  <meta property="og:description" content="Technical university notes" />
+  <link rel="canonical" href="http://localhost:4000/" />
+  <meta property="og:url" content="http://localhost:4000/" />
+  <meta property="og:site_name" content="GoNotes" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="twitter:title" content="Menu" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","description":"Technical university notes","headline":"Menu","name":"GoNotes","url":"http://localhost:4000/"}</script>
+  <!-- End Jekyll SEO tag -->
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="GoNotes" />
+  <link rel="stylesheet" href="../assets/css/custom.css">
+  <link rel="stylesheet" href="/assets/css/custom.css">
+</head><body>
+
+<style>
+.site-header { border-top: 5px solid #ffffff; border-bottom: 1px solid #e8e8e8; min-height: 55.95px; position: relative; }
+</style>
+
+<header class="site-header" role="banner">
+  <div class="wrapper">
+    <a class="site-title" rel="author" href="/Notes">GoNotes</a>
+
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h2 id="wprowadzenie">Wprowadzenie</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">@RestController</code> - oznaczenie klasy, jako endpointu REST</li>
+  <li><code class="language-plaintext highlighter-rouge">@RestMapping("/v1")</code> - określenie prefixu URI danej klasy</li>
+  <li><code class="language-plaintext highlighter-rouge">@GetMapping("/lecture")</code> - określenie funkcji handlującej zapytania GET</li>
+</ul>
+
+<h2 id="zmienne-w-uri">Zmienne w URI</h2>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/students/{studentID}"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nc">Student</span> <span class="nf">getStudent</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="kt">int</span> <span class="n">studentID</span><span class="o">)</span> <span class="o">{}</span>
+</code></pre></div></div>
+
+<h2 id="wyjątki-błędy">Wyjątki, błędy</h2>
+<p>W celu złapania i przesłania błędu, jako odpowiedzi należy:</p>
+<ul>
+  <li>Zdefiniować własną klasę z odpowiedzią (np. zawiera pola status code, message), wraz getterami, setterami</li>
+  <li>Zdefiniować własny wyjątek, np. <code class="language-plaintext highlighter-rouge">StudentNotFoundException</code> (dziedziczy po RuntimeException)</li>
+  <li>Poinformować kontroler REST, by dany błąd rozstrzygał w określony sposób.</li>
+</ul>
+
+<p>Przykład:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@ExceptionHandler</span>
+<span class="kd">public</span> <span class="nc">ResponseEntity</span><span class="o">&lt;</span><span class="nc">StudentErrorResponse</span><span class="o">&gt;</span> <span class="nf">handleException</span><span class="o">(</span><span class="nc">StudentNotFoundException</span> <span class="n">exc</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">StudentErrorResponse</span> <span class="n">err</span> <span class="o">=</span> <span class="k">new</span> <span class="o">...;</span>
+    <span class="n">err</span><span class="o">.</span><span class="na">setStatus</span><span class="o">(...);</span>
+    <span class="n">err</span><span class="o">.</span><span class="na">setMessage</span><span class="o">(...);</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nc">ResponseEntity</span><span class="o">&lt;&gt;(</span><span class="n">err</span><span class="o">,</span> <span class="nc">HttpStatus</span><span class="o">.</span><span class="na">NOT_FOUND</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+      </div>
+    </main></body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+  <title>Menu | GoNotes</title>
+  <meta name="generator" content="Jekyll v3.10.0" />
+  <meta property="og:title" content="Menu" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="Technical university notes" />
+  <meta property="og:description" content="Technical university notes" />
+  <link rel="canonical" href="http://localhost:4000/" />
+  <meta property="og:url" content="http://localhost:4000/" />
+  <meta property="og:site_name" content="GoNotes" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="twitter:title" content="Menu" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","description":"Technical university notes","headline":"Menu","name":"GoNotes","url":"http://localhost:4000/"}</script>
+  <!-- End Jekyll SEO tag -->
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="GoNotes" />
+  <link rel="stylesheet" href="../assets/css/custom.css">
+  <link rel="stylesheet" href="/assets/css/custom.css">
+</head><body>
+
+<style>
+.site-header { border-top: 5px solid #ffffff; border-bottom: 1px solid #e8e8e8; min-height: 55.95px; position: relative; }
+</style>
+
+<header class="site-header" role="banner">
+  <div class="wrapper">
+    <a class="site-title" rel="author" href="/Notes">GoNotes</a>
+
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h2 id="informacje">Informacje</h2>
+
+<p>Domyślnie, <code class="language-plaintext highlighter-rouge">connection</code> wykonuje każde zapytanie od razu, po kolei. W celu stworzenia transakcji należy zmienić tę domyślną opcję. Przykładowo:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">conn</span><span class="o">.</span><span class="na">setAutoCommit</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
+<span class="k">try</span> <span class="o">{</span>
+    <span class="n">statement</span><span class="o">.</span><span class="na">executeUpdate</span><span class="o">(</span><span class="s">"DELETE FROM students WHERE first_name='Dominik'"</span><span class="o">)</span>
+    <span class="n">statement</span><span class="o">.</span><span class="na">executeUpdate</span><span class="o">(</span><span class="s">"DELETE FROM university WHERE course_id = 1"</span><span class="o">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="na">comit</span><span class="o">();</span>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">SQLException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">conn</span><span class="o">.</span><span class="na">rollback</span><span class="o">()</span>
+<span class="o">}</span>
+<span class="n">conn</span><span class="o">.</span><span class="na">setAutoCommit</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+</code></pre></div></div>
+<p>Zamiast wykonywać wiele zapytań do bazy, można je połączyć w jedno:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">statement</span><span class="o">.</span><span class="na">addBatch</span><span class="o">(</span><span class="n">queryA</span><span class="o">);</span>
+<span class="n">statement</span><span class="o">.</span><span class="na">addBatch</span><span class="o">(</span><span class="n">queryB</span><span class="o">);</span>
+<span class="n">statement</span><span class="o">.</span><span class="na">executeBatch</span><span class="o">();</span>
+</code></pre></div></div>
+<p>Trzeba uważać, gdyż wiele sterowników różnie obsługuje zapytania batchowe. Gdy jakieś zapytanie w środku, skończy się błędem, pozostałe nadal będą wykonane - takie zachowanie w przypadku transakcji nie jest dobre. Aby to zmienić, podaj parametr w połączeniu:
+<code class="language-plaintext highlighter-rouge">jdbc:mysql://localhost:3306/students?continueBatchOnError=false</code></p>
+
+<h2 id="prepared-statements">Prepared Statements</h2>
+<p>W celu uniknięcia np. <code class="language-plaintext highlighter-rouge">SQL injection</code> warto tworzyć zparametryzowane zapytania do bazy danych. Służy do tego klasa <code class="language-plaintext highlighter-rouge">PreparedStatement</code>:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">query</span> <span class="o">=</span> <span class="s">"SELECT * FROM students WHERE id = ?"</span>
+<span class="nc">PreparedStatement</span> <span class="n">ps</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+<span class="n">ps</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">13141</span><span class="o">);</span> <span class="c1">// (index number in query, value to put)</span>
+<span class="nc">ResultSet</span> <span class="n">rs</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">();</span>
+</code></pre></div></div>
+
+      </div>
+    </main></body>
+
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+  <title>Menu | GoNotes</title>
+  <meta name="generator" content="Jekyll v3.10.0" />
+  <meta property="og:title" content="Menu" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="Technical university notes" />
+  <meta property="og:description" content="Technical university notes" />
+  <link rel="canonical" href="http://localhost:4000/" />
+  <meta property="og:url" content="http://localhost:4000/" />
+  <meta property="og:site_name" content="GoNotes" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="twitter:title" content="Menu" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","description":"Technical university notes","headline":"Menu","name":"GoNotes","url":"http://localhost:4000/"}</script>
+  <!-- End Jekyll SEO tag -->
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="GoNotes" />
+  <link rel="stylesheet" href="../assets/css/custom.css">
+  <link rel="stylesheet" href="/assets/css/custom.css">
+</head><body>
+
+<style>
+.site-header { border-top: 5px solid #ffffff; border-bottom: 1px solid #e8e8e8; min-height: 55.95px; position: relative; }
+</style>
+
+<header class="site-header" role="banner">
+  <div class="wrapper">
+    <a class="site-title" rel="author" href="/Notes">GoNotes</a>
+
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h1 id="prywatne-vlany">Prywatne VLANy</h1>
+<p>Sieci tego samego typu należy budować na switchach należących do tej samej ‘klasy zaufania’</p>
+<ul>
+  <li>sieci zaufane łączymy na ‘zaufanym’ switchu</li>
+  <li>sieci strefy DMZ łączymy na switchu DMZ,</li>
+  <li>sieci niezaufane na ‘niezaufanym’ switchu</li>
+</ul>
+
+<h3 id="ewolucja-rozwiązań">Ewolucja rozwiązań:</h3>
+<ul>
+  <li>protected port (private VLAN edge) - port nalezy do VLAN, ale nie może komunikować się z innym zabezpieczonym portem brzegowym 
+<img src="/notes/bsk-notes/notes/protected-port.png" alt="Protected port" /></li>
+  <li>private VLAN - wewnątrz podstawowej sieci VLAN (primary) definiujemy pod-VLANy: isolated (jeden), community (może być wiele). Porty promiscuous - jawne, dostępne porty (każdy może się z nimi komunikować)
+<img src="/notes/bsk-notes/notes/private-vlan.png" alt="Private VLANs" /></li>
+</ul>
+
+<p>W prywatnych VLANach wszystkie hosty należą do tej samej podsieci IP.</p>
+
+<ul>
+  <li>Primary VLAN – główny VLAN</li>
+  <li>Isolated VLAN – porty, które nie mogą się komunikować z nikim, tylko z promiscuous portem</li>
+  <li>Community VLAN – porty mogą rozmawiać między sobą i z promiscuous portem</li>
+</ul>
+
+<p>Promiscuous port – może rozmawiać ze wszystkimi (np. router, firewall)</p>
+<h1 id="hot-standby-routing-protocol-hsrp">Hot Standby Routing Protocol (HSRP)</h1>
+<p>Ustawiamy hostów nieistniejącą bramę - routery podszywają się pod niego (podobne do ProxyARP, ale maski podsieci są takie same).</p>
+
+<p><img src="/notes/bsk-notes/notes/hsrp.png" alt="HSRP" /></p>
+
+<p>Jest to tzw. wirtualny router z wirtualnym adresem MAC. W przypadku awarii jednego routera, drugi router przejmuje tą wirtualną adresację. Musi także powiadomić switche, aby te zaaktualizowały swoje tablice FDB (gratuitous ARP).</p>
+
+<p>Działanie:</p>
+<ol>
+  <li>Routery dołączają do wspólnej grupy HSRP</li>
+  <li>Konfigurują wspólne wirtualne IP, które będzie bramą domyślną dla hostów. Jest też wirtualny MAC.</li>
+  <li>Jeden zostaje <code class="language-plaintext highlighter-rouge">Active Router</code>, drugi to <code class="language-plaintext highlighter-rouge">Standby Router</code>.</li>
+</ol>
+
+<p><code class="language-plaintext highlighter-rouge">https://netadminpro.pl/konfiguracja-protokolu-hsrp/</code></p>
+
+<pre><code class="language-cisco">R(config-if) #standby 50 ip 10.1.1.1 // udawaj router o danym ip
+R(config-if) #standby 50 priority 95 
+R(config-if) #standby 50 preempt // możliwość wywłaszczenia 
+R(config-if) #standby 50 timers 3 10 // co 3 sek., ważność 10 sek.
+R(config-if) #standby 50 track f0/1 10 
+
+R#show standby [brief]
+R#debug standby 
+</code></pre>
+<p>Należy wyłączyć ICMP Redirect</p>
+
+<p><img src="/notes/bsk-notes/notes/hsrp-conf.png" alt="HSRP Conf" /></p>
+
+      </div>
+    </main></body>
+
+</html>

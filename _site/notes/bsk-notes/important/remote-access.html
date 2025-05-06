@@ -35,13 +35,29 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <h1 id="spis-treści">Spis treści</h1>
+        <h2 id="telnet---protokół-zdalnego-dostępu-bez-żadnego-szyfrowania">Telnet - protokół zdalnego dostępu bez żadnego szyfrowania</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># maksymalnie 5 połączeń (line - linia  komunikacyjna, vty - virtual terminal)</span>
+line vty 0 4 
+    transport input telnet <span class="c"># protokół dostępu: telnet </span>
+    login <span class="nb">local</span> <span class="c"># szukaj użytkownika w lokalne DB </span>
 
-<ol>
-  <li><a href="notes/java-notes">Spring/Hibernate - Java</a></li>
-  <li><a href="notes/grpc-notes">GRPC - Java/Go</a></li>
-  <li><a href="notes/bsk-notes">Bezpieczeństwo sieci komputerowych</a></li>
-</ol>
+username root password root <span class="c"># tworzy nowego użytkownika </span>
+<span class="nb">enable </span>secret root <span class="c"># do konfiguracji routera wymagane hasło (root)</span>
+</code></pre></div></div>
+
+<h2 id="ssh---protokół-zdalnego-dostępu-z-szyfrowaniem">SSH - protokół zdalnego dostępu z szyfrowaniem</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip domain-name bsk.agh
+line vty 0 4 
+    transport input ssh 
+    login <span class="nb">local
+
+</span>username root password root 
+<span class="nb">enable </span>secret root 
+
+<span class="c"># crypto key zeroize rsa </span>
+crypto key generate rsa modulus 2048 general-keys
+</code></pre></div></div>
+
 
       </div>
     </main></body>

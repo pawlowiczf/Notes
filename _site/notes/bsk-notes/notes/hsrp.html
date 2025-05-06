@@ -35,13 +35,18 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <h1 id="spis-treści">Spis treści</h1>
+        <pre><code class="language-cisco">R(config-if) #standby 50 ip 10.1.1.1 // udawaj router o danym ip
+R(config-if) #standby 50 priority 95 
+R(config-if) #standby 50 preempt // możliwość wywłaszczenia 
+R(config-if) #standby 50 timers 3 10 // co 3 sek., ważność 10 sek.
+R(config-if) #standby 50 track f0/1 10 
 
-<ol>
-  <li><a href="notes/java-notes">Spring/Hibernate - Java</a></li>
-  <li><a href="notes/grpc-notes">GRPC - Java/Go</a></li>
-  <li><a href="notes/bsk-notes">Bezpieczeństwo sieci komputerowych</a></li>
-</ol>
+R#show standby [brief]
+R#debug standby 
+</code></pre>
+<p>Należy wyłączyć ICMP Redirect</p>
+
+<p><img src="/notes/bsk-notes/notes/hsrp-conf.png" alt="HSRP Conf" /></p>
 
       </div>
     </main></body>

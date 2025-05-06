@@ -11,6 +11,7 @@ plugins:
   - jekyll-sitemap
   - jekyll-gist
   - jekyll-include-cache
+  - jekyll-sass-converter
 
 # Jeśli dalej narzeka — całkowicie wyłącz github-metadata
 exclude:
@@ -21,3 +22,7 @@ head_extra: |
   <link rel="stylesheet" href="/assets/css/custom.css">
   
 head_extra: "assets/css/custom.css"
+
+sass:
+  sass_dir: _sass
+  style: compressed

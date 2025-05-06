@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+  <title>Menu | GoNotes</title>
+  <meta name="generator" content="Jekyll v3.10.0" />
+  <meta property="og:title" content="Menu" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="Technical university notes" />
+  <meta property="og:description" content="Technical university notes" />
+  <link rel="canonical" href="http://localhost:4000/" />
+  <meta property="og:url" content="http://localhost:4000/" />
+  <meta property="og:site_name" content="GoNotes" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="twitter:title" content="Menu" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","description":"Technical university notes","headline":"Menu","name":"GoNotes","url":"http://localhost:4000/"}</script>
+  <!-- End Jekyll SEO tag -->
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="GoNotes" />
+  <link rel="stylesheet" href="../assets/css/custom.css">
+  <link rel="stylesheet" href="/assets/css/custom.css">
+</head><body>
+
+<style>
+.site-header { border-top: 5px solid #ffffff; border-bottom: 1px solid #e8e8e8; min-height: 55.95px; position: relative; }
+</style>
+
+<header class="site-header" role="banner">
+  <div class="wrapper">
+    <a class="site-title" rel="author" href="/Notes">GoNotes</a>
+
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h3 id="wzorzec-działania-zapor-ogniowych">Wzorzec działania zapor ogniowych:</h3>
+<ul>
+  <li>domyślne przepuszczanie,</li>
+  <li>domyślne odrzucanie</li>
+</ul>
+
+<h3 id="urządzenia-idsips">Urządzenia IDS/IPS</h3>
+<ul>
+  <li>IDS - Intrusion Detection System - wykrywa i raportuje</li>
+  <li>IPS - Inttrustion Protection System - wykrywa i reaguje</li>
+</ul>
+
+<h2 id="listy-acl-access-control-lists">Listy ACL (Access Control Lists)</h2>
+<p>Najprostsze klasyfikatory (<strong>standard</strong>) klasyfikują jedynie na podstawie adresu źródłowego. Są także rozszerzone (<strong>extended</strong>), które klasyfikują na podstawie:</p>
+<ul>
+  <li>adresów źródłowych i docelowych</li>
+  <li>informacji dodatkowej: numerów portów TCP, UDP, pakietach ICMP, flag TCP itd.</li>
+</ul>
+
+<p>Pakiety przechodzą sekwencyjnie przez listę dostępu - dlatego na początku listy są wpisy najbardziej szczegółowe.</p>
+
+<p>Tworzenie firewalla przebiega dwuetapowo:</p>
+<ol>
+  <li>Definiowanie listy o konkretnym numerze (określającym jej rodzaj):
+    <pre><code class="language-cisco">access-list NUMER permit|deny ADRES_ŹRÓDŁOWY WILDCARD
+</code></pre>
+  </li>
+  <li>Przypisanie list konkretnym interfejsom:
+    <pre><code class="language-cisco">ip access-group NUMER in|out
+</code></pre>
+  </li>
+</ol>
+
+<p>Aby wyświetlić utworzone listy wywołaj: <code class="language-plaintext highlighter-rouge">show access-lists</code></p>
+
+<h2 id="działanie-odwróconych-masek-wildcard">Działanie odwróconych masek (wildcard)</h2>
+<p>Działają analogicznie do zwykłych  masek adresu, lecz wykonują operację <em>OR</em> (zamiast operacji <em>AND</em>). W efekcie:</p>
+<ul>
+  <li>0 - sprawdź odpowiedni bit</li>
+  <li>1 - bit nieistotny</li>
+</ul>
+
+<p><strong>Przykład</strong>:
+W liście dostępu mamy wpis: <code class="language-plaintext highlighter-rouge">10.131.10.40 0.0.255.0 deny</code>. Przychodzi pakiet z adresem źródłowym <code class="language-plaintext highlighter-rouge">10.131.51.40</code>. Przykładając maskę do adresu w liście dostajemy: <code class="language-plaintext highlighter-rouge">10.131.255.40</code>, robiąc to samo dla kolejnego adresu: <code class="language-plaintext highlighter-rouge">10.131.255.40</code>. Dostaliśmy to samo, czyli adres dopasował się do wpisu w liście - zostanie odrzucony.</p>
+
+<h2 id="rozszerzone-listy-dostępu">Rozszerzone listy dostępu</h2>
+<p><img src="/notes/bsk-notes/images/extended.png" alt="Rozszerzone listy dostępu" />
+<img src="/notes/bsk-notes/images/extended-examples.png" alt="Przykładowe listy dostępu" /></p>
+
+<p><strong>Typy list dostępu rozróżniane są przez ich numer. Przykładowo:</strong></p>
+<ul>
+  <li>1-99 standard IP</li>
+  <li>100-199 extended IP</li>
+</ul>
+
+      </div>
+    </main></body>
+
+</html>

@@ -35,13 +35,29 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <h1 id="spis-treści">Spis treści</h1>
+        <h1 id="glbp---gateway-load-balancing-protocol">GLBP - Gateway Load Balancing Protocol</h1>
+<p>Zapewnia redundację bramy (jak HSRP), ale także równoważy obciążenie między wieloma routerami brzegowymi. W tym protokole, wszystkie routery aktywnie przekazują ruch.</p>
 
+<h2 id="podstawy-działania">Podstawy działania</h2>
+<p>Wszystkie routery mają GLBP dzielą ten sam wirtualny adres IP, ale każdy z osobna ma własny wirtualny adres MAC. Router odpowiada za przesył pakietów z podgrupy urządzeń w danej sieci.</p>
+
+<h2 id="etapy-działania-glbp">Etapy działania GLBP</h2>
 <ol>
-  <li><a href="notes/java-notes">Spring/Hibernate - Java</a></li>
-  <li><a href="notes/grpc-notes">GRPC - Java/Go</a></li>
-  <li><a href="notes/bsk-notes">Bezpieczeństwo sieci komputerowych</a></li>
+  <li>Wybranie AVG (active virtual gateway)</li>
+  <li>Przypisanie wielu wirtualnych adresów MAC członkom grupy. AVG - active virtual forwarder</li>
+  <li>AVG odpowiada na zapytania ARP od kientów różnymi adresami MAC przypisanymi AVF-om</li>
+  <li>AVG obsługują ruch kierowany do wirtualnego routera na różne adresy MAC</li>
 </ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>interface GigabitEthernet0/0
+ ip address 192.168.1.2 255.255.255.0
+ glbp 1 ip 192.168.1.1
+ glbp 1 priority 110
+ glbp 1 preempt
+ glbp 1 load-balancing round-robin
+</code></pre></div></div>
+
+<p><img src="/notes/bsk-notes/notes/glbp-conf.png" alt="GLBP Configuration" /></p>
 
       </div>
     </main></body>

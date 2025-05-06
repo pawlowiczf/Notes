@@ -35,13 +35,15 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <h1 id="spis-treści">Spis treści</h1>
+        <p>Link: <a href="https://start.spring.io/">https://start.spring.io/</a></p>
 
-<ol>
-  <li><a href="notes/java-notes">Spring/Hibernate - Java</a></li>
-  <li><a href="notes/grpc-notes">GRPC - Java/Go</a></li>
-  <li><a href="notes/bsk-notes">Bezpieczeństwo sieci komputerowych</a></li>
-</ol>
+<h2 id="auto-reload">Auto-reload</h2>
+<p>W celu automatycznego przeładowywania aplikacji, po wykryciu zmian, dodaj zależność do pliku <code class="language-plaintext highlighter-rouge">pom.xml</code>:</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-boot-devtools<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></div>
 
       </div>
     </main></body>
