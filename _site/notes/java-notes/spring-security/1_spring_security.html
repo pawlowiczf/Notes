@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+  <title>Menu | GoNotes</title>
+  <meta name="generator" content="Jekyll v3.10.0" />
+  <meta property="og:title" content="Menu" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="Technical university notes" />
+  <meta property="og:description" content="Technical university notes" />
+  <link rel="canonical" href="http://localhost:4000/" />
+  <meta property="og:url" content="http://localhost:4000/" />
+  <meta property="og:site_name" content="GoNotes" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta property="twitter:title" content="Menu" />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","description":"Technical university notes","headline":"Menu","name":"GoNotes","url":"http://localhost:4000/"}</script>
+  <!-- End Jekyll SEO tag -->
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="GoNotes" />
+  <link rel="stylesheet" href="../assets/css/custom.css">
+  <link rel="stylesheet" href="/assets/css/custom.css">
+</head><body>
+
+<style>
+.site-header { border-top: 5px solid #ffffff; border-bottom: 1px solid #e8e8e8; min-height: 55.95px; position: relative; }
+</style>
+
+<header class="site-header" role="banner">
+  <div class="wrapper">
+    <a class="site-title" rel="author" href="/Notes">GoNotes</a>
+
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h2 id="instalacja-dependencji">Instalacja dependencji</h2>
+
+<p>Dodaj dependencję <code class="language-plaintext highlighter-rouge">spring boot starter security</code>. Automatycznie, wszystkie endpointy są zastrzeżone loginem i hasłem (hasło podawane jest w konsoli). Można podać własne dane logowania w pliku <code class="language-plaintext highlighter-rouge">application.properties</code>:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">spring</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">user</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">chomik123</span>
+<span class="n">spring</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">user</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">root123</span>
+</code></pre></div></div>
+
+<h2 id="tworzenie-podstawowych-ról-w-pamięci">Tworzenie podstawowych ról w pamięci</h2>
+<p>W pliku konfiguracyjnym dodajemy:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Bean</span>
+<span class="kd">public</span> <span class="nc">InMemoryUserDetailsManager</span> <span class="nf">userDetailsManager</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">UserDetails</span> <span class="n">john</span> <span class="o">=</span> <span class="nc">User</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">username</span><span class="o">(</span><span class="s">"john"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">password</span><span class="o">(</span><span class="s">"{noop}test123"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">roles</span><span class="o">(</span><span class="s">"EMPLOYEE"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+    <span class="nc">UserDetails</span> <span class="n">mary</span> <span class="o">=</span> <span class="nc">User</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">username</span><span class="o">(</span><span class="s">"mary"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">password</span><span class="o">(</span><span class="s">"{noop}test123"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">roles</span><span class="o">(</span><span class="s">"EMPLOYEE"</span><span class="o">,</span> <span class="s">"MANAGER"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+    <span class="nc">UserDetails</span> <span class="n">susan</span> <span class="o">=</span> <span class="nc">User</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">username</span><span class="o">(</span><span class="s">"susan"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">password</span><span class="o">(</span><span class="s">"{noop}test123"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">roles</span><span class="o">(</span><span class="s">"EMPLOYEE"</span><span class="o">,</span> <span class="s">"MANAGER"</span><span class="o">,</span> <span class="s">"ADMIN"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+
+    <span class="k">return</span> <span class="k">new</span> <span class="nf">InMemoryUserDetailsManager</span><span class="o">(</span><span class="n">john</span><span class="o">,</span> <span class="n">mary</span><span class="o">,</span> <span class="n">susan</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>W celu wysłania zapytania w <code class="language-plaintext highlighter-rouge">Postman</code>, dodajemy pola w <code class="language-plaintext highlighter-rouge">Basic auth</code>.</p>
+
+<h2 id="ochrona-api-na-podstawie-ról">Ochrona API na podstawie ról</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Bean</span>
+<span class="kd">public</span> <span class="nc">SecurityFilterChain</span> <span class="nf">filterChain</span><span class="o">(</span><span class="nc">HttpSecurity</span> <span class="n">http</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="n">http</span><span class="o">.</span><span class="na">authorizeHttpRequests</span><span class="o">(</span><span class="n">configurer</span> <span class="o">-&gt;</span> <span class="o">{</span>
+        <span class="n">configurer</span>
+                <span class="o">.</span><span class="na">requestMatchers</span><span class="o">(</span><span class="nc">HttpMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">,</span> <span class="s">"/api/employees"</span><span class="o">).</span><span class="na">hasRole</span><span class="o">(</span><span class="s">"EMPLOYEE"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">requestMatchers</span><span class="o">(</span><span class="nc">HttpMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">,</span> <span class="s">"/api/employees/**"</span><span class="o">).</span><span class="na">hasRole</span><span class="o">(</span><span class="s">"EMPLOYEE"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">requestMatchers</span><span class="o">(</span><span class="nc">HttpMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">,</span> <span class="s">"/api/employees"</span><span class="o">).</span><span class="na">hasRole</span><span class="o">(</span><span class="s">"MANAGER"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">requestMatchers</span><span class="o">(</span><span class="nc">HttpMethod</span><span class="o">.</span><span class="na">PUT</span><span class="o">,</span> <span class="s">"/api/employees"</span><span class="o">).</span><span class="na">hasRole</span><span class="o">(</span><span class="s">"MANAGER"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">requestMatchers</span><span class="o">(</span><span class="nc">HttpMethod</span><span class="o">.</span><span class="na">DELETE</span><span class="o">,</span> <span class="s">"/api/employees/**"</span><span class="o">).</span><span class="na">hasRole</span><span class="o">(</span><span class="s">"ADMIN"</span><span class="o">);</span>
+                <span class="c1">// hasAnyRole, </span>
+    <span class="o">});</span>
+
+    <span class="n">http</span><span class="o">.</span><span class="na">httpBasic</span><span class="o">(</span><span class="nc">Customizer</span><span class="o">.</span><span class="na">withDefaults</span><span class="o">());</span>
+    <span class="n">http</span><span class="o">.</span><span class="na">csrf</span><span class="o">(</span><span class="nl">AbstractHttpConfigurer:</span><span class="o">:</span><span class="n">disable</span><span class="o">);</span>
+
+    <span class="k">return</span> <span class="n">http</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+      </div>
+    </main></body>
+
+</html>

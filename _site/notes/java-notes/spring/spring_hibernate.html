@@ -86,6 +86,28 @@ spring.datasource.username=root
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">spring</span><span class="o">.</span><span class="na">jpa</span><span class="o">.</span><span class="na">hibernate</span><span class="o">.</span><span class="na">ddl</span><span class="o">-</span><span class="n">auto</span><span class="o">=</span> <span class="c1">// update, create</span>
 </code></pre></div></div>
 
+<h2 id="jparepository-i-własne-implementacje-dao">JPARepository i własne implementacje DAO</h2>
+<p>JPARepository ułatwia i automatycznie generuje kod, do interakcji z bazą danych. Wystarczy implementować interfejs <code class="language-plaintext highlighter-rouge">JpaRepository</code>, podajać encję i typ klucza głównego.</p>
+
+<p>Jeśli chcemy dodać własne metody, tworzymy customowy interfejs, jego implementację i rozszerzamy bazowe repozytorium własnie o ten interfejs. Przykładowo:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepositoryCustom</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">doSomethingCustom</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserRepositoryImpl</span> <span class="kd">implements</span> <span class="nc">UserRepositoryCustom</span> <span class="o">{</span>
+    <span class="nd">@PersistenceContext</span>
+    <span class="kd">private</span> <span class="nc">EntityManager</span> <span class="n">entityManager</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doSomethingCustom</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// Twoja implementacja z użyciem EntityManagera</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserRepository</span> <span class="kd">extends</span> <span class="nc">JpaRepository</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">,</span> <span class="nc">Long</span><span class="o">&gt;,</span> <span class="nc">UserRepositoryCustom</span> <span class="o">{</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
       </div>
     </main></body>
 

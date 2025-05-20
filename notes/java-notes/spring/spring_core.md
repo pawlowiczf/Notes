@@ -4,7 +4,7 @@ layout: default
 ---
 
 ## Wstrzykiwanie zależości przez konstruktor
-W celu oznaczenia klasy, jako kandydata do wstrzyknięcia, należy oznaczyć go anotacją `@Component`. Przykładowo:
+W celu oznaczenia klasy, jako kandydata do wstrzyknięcia, należy oznaczyć go adnotacją `@Component`. Przykładowo:
 ```
 @Component 
 @Lazy

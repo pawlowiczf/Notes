@@ -57,3 +57,26 @@ query.setParameter("theData", "Kowalski")
 ```java
 spring.jpa.hibernate.ddl-auto= // update, create
 ```
+
+## JPARepository i własne implementacje DAO
+JPARepository ułatwia i automatycznie generuje kod, do interakcji z bazą danych. Wystarczy implementować interfejs `JpaRepository`, podajać encję i typ klucza głównego.    
+
+Jeśli chcemy dodać własne metody, tworzymy customowy interfejs, jego implementację i rozszerzamy bazowe repozytorium własnie o ten interfejs. Przykładowo:
+```java
+public interface UserRepositoryCustom {
+    void doSomethingCustom();
+}
+
+public class UserRepositoryImpl implements UserRepositoryCustom {
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Override
+    public void doSomethingCustom() {
+        // Twoja implementacja z użyciem EntityManagera
+    }
+}
+
+public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
+}
+```

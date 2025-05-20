@@ -35,14 +35,11 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <h1 id="spis-treści">Spis treści</h1>
+        <p>W celu uproszczenia pisania tego samego kodu w endpointach dla każdego repozytorium, można skorzystać z wtyczki <code class="language-plaintext highlighter-rouge">spring data rest</code>, która automatycznie, na podstawie danego repozytorium, wystawia endpointy. Domyślnie robi to pod ścieżką liczby mnogiej nazwy encji - przykładowo mająć encję <code class="language-plaintext highlighter-rouge">Employees</code>, endpointy będą wystawione pod: <code class="language-plaintext highlighter-rouge">/employees/</code>.</p>
 
-<ol>
-  <li><a href="notes/java-notes">Spring/Hibernate - Java</a></li>
-  <li><a href="notes/grpc-notes">GRPC - Java/Go</a></li>
-  <li><a href="notes/bsk-notes">Bezpieczeństwo sieci komputerowych</a></li>
-  <li><a href="notes/erlang">Erlang</a></li>
-</ol>
+<p>Jeśli chcemy zmienić ten domyślny URI, to dodajemy adnotację <code class="language-plaintext highlighter-rouge">@RepositoryRestResource(path = "members")</code>. Można także dodać bazowy przedrostek w URI, konfiguruje się to już w pliku <code class="language-plaintext highlighter-rouge">application.properties</code>: <code class="language-plaintext highlighter-rouge">spring.data.rest.base-path=api</code>.</p>
+
+<p>Wtyczka dodaje też wiele innych opcji, np. sortowanie po danym polu encji: <code class="language-plaintext highlighter-rouge">/employees?sort=lastName,desc</code>.</p>
 
       </div>
     </main></body>
